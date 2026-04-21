@@ -1,0 +1,46 @@
+import pandas as pd
+
+# Make a dataframe from csv file
+df = pd.read_csv("Data.csv")
+
+# Sort dataframe values in order of severity
+df = df.sort_values(by="Severity", ascending=False)
+
+# Create separate dataframes for each quadrant
+northEast_df = df[df["Quadrant"] == "NorthEast"]
+northWest_df = df[df["Quadrant"] == "NorthWest"]
+southEast_df = df[df["Quadrant"] == "SouthEast"]
+southWest_df = df[df["Quadrant"] == "SouthWest"]
+
+# Function to make the dataframes pretty
+def print_dataframe(df_to_print):
+    if df_to_print.empty:
+        print("No data in this quadrant.\n")
+        return
+
+    col_widths = {col: max(df_to_print[col].astype(str).map(len).max(), len(col)) + 3 for col in df_to_print.columns}
+
+    # Print headers
+    for rowHeader in df_to_print.columns:
+        print(f"{rowHeader:<{col_widths[rowHeader]}}", end="")
+    print()
+
+    # Print rows
+    for _, row in df_to_print.iterrows():
+        for col in df_to_print.columns:
+            print(f"{str(row[col]):<{col_widths[col]}}", end="")
+        print()
+    print("-------------------------------------------\n")
+
+# Print each quadrant
+print("NorthEast Quadrant Data")
+print_dataframe(northEast_df)
+
+print("NorthWest Quadrant")
+print_dataframe(northWest_df)
+
+print("SouthEast Quadrant")
+print_dataframe(southEast_df)
+
+print("SouthWest Quadrant")
+print_dataframe(southWest_df)
